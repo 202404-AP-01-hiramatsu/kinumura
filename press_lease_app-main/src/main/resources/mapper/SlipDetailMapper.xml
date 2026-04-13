@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.mapper.SlipDetailMapper">
+
+    <insert id="insert" parameterType="com.example.demo.entity.SlipDetail" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO slip_detail (
+            slip_id,
+            code,
+            name,
+            price,
+            tax_price,
+            credit,
+            media_name,
+            release_date,
+            note
+        ) VALUES (
+            #{slipId},
+            #{code},
+            #{name},
+            #{price},
+            #{taxPrice},
+            #{credit},
+            #{mediaName},
+            #{releaseDate},
+            #{note}
+        )
+    </insert>
+
+    <select id="findBySlipNo" resultType="com.example.demo.entity.SlipDetail">
+        SELECT d.id,
+               d.slip_id AS slipId,
+               d.code,
+               d.name,
+               d.price,
+               d.tax_price AS taxPrice,
+               d.credit,
+               d.media_name AS mediaName,
+               d.release_date AS releaseDate,
+               d.note,
+               d.returned,
+               d.returned_date AS returnedDate
+        FROM slip_detail d
+        JOIN slip s ON d.slip_id = s.id
+        WHERE s.slip_no = #{slipNo}
+        ORDER BY d.id
+    </select>
+
+    <update id="updateReturn" parameterType="com.example.demo.entity.SlipDetail">
+        UPDATE slip_detail
+        SET returned = #{returned},
+            returned_date = #{returnedDate}
+        WHERE id = #{id}
+    </update>
+
+    <select id="findSlipRowsBySlipNo" resultType="com.example.demo.dto.SlipDetailDto">
+        SELECT s.id AS slipId,
+               s.slip_no AS slipNo,
+               s.staff_name AS staffName,
+               s.loan_date AS loanDate,
+               s.return_date AS returnDate,
+               d.id,
+               d.code,
+               d.name,
+               d.price,
+               d.tax_price AS taxPrice,
+               d.credit,
+               d.media_name AS mediaName,
+               d.release_date AS releaseDate,
+               d.note,
+               d.returned
+        FROM slip s
+        JOIN slip_detail d ON s.id = d.slip_id
+        WHERE s.slip_no LIKE CONCAT(#{slipNo}, '%')
+        ORDER BY d.id
+    </select>
+
+    <select id="findSlipRowsByCode" resultType="com.example.demo.dto.SlipDetailDto">
+        SELECT s.id AS slipId,
+               s.slip_no AS slipNo,
+               s.staff_name AS staffName,
+               s.loan_date AS loanDate,
+               s.return_date AS returnDate,
+               d.id,
+               d.code,
+               d.name,
+               d.price,
+               d.tax_price AS taxPrice,
+               d.credit,
+               d.media_name AS mediaName,
+               d.release_date AS releaseDate,
+               d.note,
+               d.returned
+        FROM slip s
+        JOIN slip_detail d ON s.id = d.slip_id
+        WHERE d.code LIKE CONCAT(#{code}, '%')
+        ORDER BY s.slip_no, d.id
+    </select>
+
+    <update id="updateDetail" parameterType="com.example.demo.dto.SlipDetailDto">
+        UPDATE slip_detail
+        SET code = #{code},
+            name = #{name},
+            price = #{price},
+            tax_price = #{taxPrice},
+            credit = #{credit},
+            media_name = #{mediaName},
+            release_date = #{releaseDate},
+            note = #{note}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteBySlipId">
+        DELETE FROM slip_detail
+        WHERE slip_id = #{slipId}
+    </delete>
+
+</mapper>

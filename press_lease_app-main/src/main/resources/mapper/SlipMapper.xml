@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.mapper.SlipMapper">
+
+    <select id="countByMonth" resultType="int">
+        SELECT COUNT(*)
+        FROM slip
+        WHERE slip_no LIKE CONCAT(#{ym}, '%')
+    </select>
+
+    <insert id="insert" parameterType="com.example.demo.entity.Slip" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO slip (
+            slip_no,
+            staff_name,
+            customer_name,
+            contact_info,
+            email_address,
+            loan_date,
+            return_date
+        ) VALUES (
+            #{slipNo},
+            #{staffName},
+            #{customerName},
+            #{contactInfo},
+            #{emailAddress},
+            #{loanDate},
+            #{returnDate}
+        )
+    </insert>
+
+    <select id="findBySlipNo" resultType="com.example.demo.entity.Slip">
+        SELECT id,
+               slip_no AS slipNo,
+               staff_name AS staffName,
+               customer_name AS customerName,
+               contact_info AS contactInfo,
+               email_address AS emailAddress,
+               loan_date AS loanDate,
+               return_date AS returnDate,
+               created_at AS createdAt
+        FROM slip
+        WHERE slip_no = #{slipNo}
+    </select>
+
+    <select id="findIdBySlipNo" resultType="int">
+        SELECT id
+        FROM slip
+        WHERE slip_no = #{slipNo}
+    </select>
+
+    <update id="updateSlip" parameterType="com.example.demo.entity.Slip">
+        UPDATE slip
+        SET staff_name = #{staffName},
+            customer_name = #{customerName},
+            contact_info = #{contactInfo},
+            email_address = #{emailAddress},
+            loan_date = #{loanDate},
+            return_date = #{returnDate}
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateHeader" parameterType="com.example.demo.entity.Slip">
+        UPDATE slip
+        SET loan_date = #{loanDate},
+            return_date = #{returnDate}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM slip
+        WHERE id = #{id}
+    </delete>
+
+</mapper>
