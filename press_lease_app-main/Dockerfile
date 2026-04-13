@@ -21,4 +21,4 @@ COPY --from=build /workspace/target/*.jar /app/app.jar
 
 EXPOSE 10000
 
-ENTRYPOINT ["java", "-Dserver.port=10000", "-jar", "/app/app.jar"]
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]
