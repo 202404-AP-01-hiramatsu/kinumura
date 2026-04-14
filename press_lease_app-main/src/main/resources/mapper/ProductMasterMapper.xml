@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.mapper.ProductMasterMapper">
+
+    <select id="findByCode" resultType="com.example.demo.entity.ProductMaster">
+        SELECT id,
+               code,
+               name,
+               tax_price AS taxPrice
+        FROM product_master
+        WHERE code = #{code}
+    </select>
+
+    <select id="countAll" resultType="int">
+        SELECT COUNT(*)
+        FROM product_master
+    </select>
+
+    <insert id="insert" parameterType="com.example.demo.entity.ProductMaster" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO product_master (
+            code,
+            name,
+            tax_price
+        ) VALUES (
+            #{code},
+            #{name},
+            #{taxPrice}
+        )
+    </insert>
+
+    <select id="findAll" resultType="com.example.demo.entity.ProductMaster">
+        SELECT id,
+               code,
+               name,
+               tax_price AS taxPrice
+        FROM product_master
+        ORDER BY code
+    </select>
+
+</mapper>

@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS product_master (
+    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    code VARCHAR(20) NOT NULL UNIQUE,
+    name VARCHAR(255),
+    tax_price INTEGER
+);

@@ -34,6 +34,7 @@ public class DatabaseInitializationRunner implements ApplicationRunner {
         List<Resource> scripts = switch (databasePlatform.toLowerCase()) {
             case "postgres", "postgresql", "supabase" -> List.of(
                     new ClassPathResource("db/postgres/todo-init.sql"),
+                    new ClassPathResource("db/postgres/product-master-init.sql"),
                     new ClassPathResource("db/postgres/slip-init.sql"),
                     new ClassPathResource("db/postgres/slip-media-init.sql"),
                     new ClassPathResource("db/postgres/slip-media-project-init.sql"),
@@ -42,6 +43,7 @@ public class DatabaseInitializationRunner implements ApplicationRunner {
                     new ClassPathResource("db/postgres/master-setting-init.sql"));
             default -> List.of(
                     new ClassPathResource("db/mysql-init.sql"),
+                    new ClassPathResource("db/product-master-init.sql"),
                     new ClassPathResource("db/slip-init.sql"),
                     new ClassPathResource("db/slip-media-init.sql"),
                     new ClassPathResource("db/slip-media-project-init.sql"),

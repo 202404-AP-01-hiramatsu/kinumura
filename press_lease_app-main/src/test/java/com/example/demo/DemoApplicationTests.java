@@ -42,7 +42,7 @@ import com.example.demo.mapper.SlipDetailMapper;
 import com.example.demo.mapper.SlipMapper;
 import com.example.demo.mapper.SlipMediaMapper;
 import com.example.demo.mapper.TodoMapper;
-import com.example.demo.service.GoogleSheetsService;
+import com.example.demo.service.ProductMasterService;
 import com.example.demo.service.SlipExcelService;
 import com.example.demo.service.SlipService;
 
@@ -77,7 +77,7 @@ class DemoApplicationTests {
     private MasterSettingMapper masterSettingMapper;
 
     @MockBean
-    private GoogleSheetsService googleSheetsService;
+    private ProductMasterService productMasterService;
 
     @MockBean
     private SlipService slipService;
@@ -160,7 +160,7 @@ class DemoApplicationTests {
 
     @Test
     void searchReturnsMatchingSheetRow() throws Exception {
-        given(googleSheetsService.findByCode("A001"))
+        given(productMasterService.findByCode("A001"))
                 .willReturn(Optional.of(new SheetSearchResponse("A001", "Product A", "1000")));
 
         mockMvc.perform(get("/api/search").param("code", "A001"))
