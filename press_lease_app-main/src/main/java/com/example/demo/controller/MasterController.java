@@ -12,7 +12,7 @@ import com.example.demo.mapper.MasterSettingMapper;
 @Controller
 public class MasterController {
 
-    private static final String DEFAULT_MASTER_TEXT = "ここにExcelに表示する固定文言を入力";
+    private static final String DEFAULT_MASTER_TEXT = "ここにExcelに表示する固定文言を入力してください";
 
     private final MasterSettingMapper masterSettingMapper;
 

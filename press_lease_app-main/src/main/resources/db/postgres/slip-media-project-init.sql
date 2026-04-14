@@ -1,0 +1,2 @@
+ALTER TABLE slip_media
+ADD COLUMN IF NOT EXISTS project_name VARCHAR(100);
