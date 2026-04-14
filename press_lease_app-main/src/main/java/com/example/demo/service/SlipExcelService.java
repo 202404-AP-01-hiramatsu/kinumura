@@ -19,11 +19,9 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.example.demo.dto.ExcelDetailRowDto;
 import com.example.demo.dto.ExcelExportRequest;
-import com.example.demo.entity.MasterSetting;
 import com.example.demo.entity.Slip;
 import com.example.demo.entity.SlipDetail;
 import com.example.demo.entity.SlipMedia;
-import com.example.demo.mapper.MasterSettingMapper;
 import com.example.demo.mapper.SlipDetailMapper;
 import com.example.demo.mapper.SlipMapper;
 import com.example.demo.mapper.SlipMediaMapper;
@@ -44,17 +42,17 @@ public class SlipExcelService {
     private final SlipMapper slipMapper;
     private final SlipDetailMapper slipDetailMapper;
     private final SlipMediaMapper slipMediaMapper;
-    private final MasterSettingMapper masterSettingMapper;
+    private final MasterSettingService masterSettingService;
 
     public SlipExcelService(
             SlipMapper slipMapper,
             SlipDetailMapper slipDetailMapper,
             SlipMediaMapper slipMediaMapper,
-            MasterSettingMapper masterSettingMapper) {
+            MasterSettingService masterSettingService) {
         this.slipMapper = slipMapper;
         this.slipDetailMapper = slipDetailMapper;
         this.slipMediaMapper = slipMediaMapper;
-        this.masterSettingMapper = masterSettingMapper;
+        this.masterSettingService = masterSettingService;
     }
 
     public void exportSlip(String slipNo, HttpServletResponse response) throws IOException {
@@ -67,7 +65,6 @@ public class SlipExcelService {
         List<SlipMedia> mediaEntries = slip.getId() != null
                 ? slipMediaMapper.findBySlipId(slip.getId())
                 : Collections.emptyList();
-        MasterSetting masterSetting = masterSettingMapper.find();
 
         byte[] bytes = renderWorkbook(
                 slip.getSlipNo(),
@@ -79,7 +76,7 @@ public class SlipExcelService {
                 slip.getReturnDate(),
                 mediaEntries,
                 details.stream().map(this::toExcelDetailRow).toList(),
-                masterSetting != null ? masterSetting.getMasterText() : "");
+                masterSettingService.getMasterText());
 
         response.setContentType(
                 "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
@@ -91,7 +88,6 @@ public class SlipExcelService {
     }
 
     public byte[] exportRequest(ExcelExportRequest request) throws IOException {
-        MasterSetting masterSetting = masterSettingMapper.find();
         return renderWorkbook(
                 request.getSlipNo(),
                 request.getStaffName(),
@@ -102,7 +98,7 @@ public class SlipExcelService {
                 request.getReturnDate(),
                 request.getMediaEntries(),
                 request.getDetails(),
-                masterSetting != null ? masterSetting.getMasterText() : "");
+                masterSettingService.getMasterText());
     }
 
     private byte[] renderWorkbook(

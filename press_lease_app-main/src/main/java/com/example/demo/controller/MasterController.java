@@ -7,42 +7,26 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.example.demo.entity.MasterSetting;
-import com.example.demo.mapper.MasterSettingMapper;
+import com.example.demo.service.MasterSettingService;
 
 @Controller
 public class MasterController {
 
-    private static final String DEFAULT_MASTER_TEXT = "ここにExcelに表示する固定文言を入力してください";
+    private final MasterSettingService masterSettingService;
 
-    private final MasterSettingMapper masterSettingMapper;
-
-    public MasterController(MasterSettingMapper masterSettingMapper) {
-        this.masterSettingMapper = masterSettingMapper;
+    public MasterController(MasterSettingService masterSettingService) {
+        this.masterSettingService = masterSettingService;
     }
 
     @GetMapping("/master")
     public String show(Model model) {
-        model.addAttribute("master", getOrCreateSetting());
+        model.addAttribute("master", masterSettingService.getOrCreateSetting());
         return "master";
     }
 
     @PostMapping("/master/update")
     public String update(@ModelAttribute MasterSetting master) {
-        MasterSetting current = getOrCreateSetting();
-        current.setMasterText(master.getMasterText());
-        masterSettingMapper.update(current);
+        masterSettingService.updateMasterText(master.getMasterText());
         return "redirect:/master?saved=1";
-    }
-
-    private MasterSetting getOrCreateSetting() {
-        MasterSetting setting = masterSettingMapper.find();
-        if (setting != null) {
-            return setting;
-        }
-
-        MasterSetting initial = new MasterSetting();
-        initial.setMasterText(DEFAULT_MASTER_TEXT);
-        masterSettingMapper.insert(initial);
-        return masterSettingMapper.find();
     }
 }
