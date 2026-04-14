@@ -6,7 +6,17 @@
 <mapper namespace="com.example.demo.mapper.TodoMapper">
 
     <select id="findAll" resultType="com.example.demo.entity.Todo">
-        SELECT id, title FROM todo
+        SELECT id, title
+        FROM todo
+        ORDER BY id DESC
     </select>
+
+    <insert id="insert" parameterType="com.example.demo.entity.Todo" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO todo (
+            title
+        ) VALUES (
+            #{title}
+        )
+    </insert>
 
 </mapper>

@@ -7,4 +7,6 @@ import com.example.demo.entity.Todo;
 public interface TodoMapper {
 
     List<Todo> findAll();
+
+    void insert(Todo todo);
 }
